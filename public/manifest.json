@@ -1,0 +1,56 @@
+{
+    "name": "就业中心插件",
+    "version": "1.0.0",
+    "description": "辅助业务人员智能审批业务",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "static/js/background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "static/js/content.js"
+            ],
+            "css": [
+                "static/css/content.css"
+            ],
+            "run_at": "document_end"
+        }
+    ],
+    "permissions": [
+        "storage",
+        "contextMenus",
+        "tabs"
+    ],
+    "host_permissions": [],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "/images/*.png"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ],
+    "default_locale": "zh_CN",
+    "action": {
+        "default_popup": "index.html",
+        "default_icon": {
+            "16": "images/employ_icon.png",
+            "32": "images/employ_icon.png",
+            "48": "images/employ_icon.png",
+            "128": "images/employ_icon.png"
+        },
+        "default_title": "就业中心小助手"
+    },
+    "icons": {
+        "16": "images/employ_icon.png",
+        "32": "images/employ_icon.png",
+        "48": "images/employ_icon.png",
+        "128": "images/employ_icon.png"
+    }
+}
