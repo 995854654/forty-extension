@@ -1,7 +1,9 @@
+import Popup from "@/popup"
+
 function App() {
   return (
     <div className="App">
-      React-jyzx-crx
+      <Popup/>
     </div>
   );
 }
