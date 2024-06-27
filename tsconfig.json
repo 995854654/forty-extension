@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "allowSyntheticDefaultImports": true,
+    "outDir": "./build",
+    "esModuleInterop": true,                
+    "allowJs": true,
+    "jsx": "preserve",
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["**/*.tsx", "**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules"]
+}

@@ -1,9 +1,9 @@
 import React from 'react'
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2';
-import LeftLayout from './components/LeftLayout';
-import RightLayout from './components/RightLayout';
-import {siderConfig} from "@/data/sideMenu"
+import LeftLayout from './components/layout/LeftLayout';
+import RightLayout from './components/layout/RightLayout';
+import { siderConfig } from "@/data/sideMenu"
 
 export default function SidePanel() {
   return (
@@ -15,10 +15,10 @@ export default function SidePanel() {
     >
 
       <Grid container spacing={0} sx={{
-        padding:0,
-        margin:0,
+        padding: 0,
+        margin: 0,
         width: "100vw",
-        }}>
+      }}>
         <Box sx={{
           display: "inline-block",
           width: `calc(100% - ${siderConfig.SIDER_WIDTH} - 1%)`,
@@ -33,9 +33,7 @@ export default function SidePanel() {
           width: siderConfig.SIDER_WIDTH,
         }}>
           <RightLayout></RightLayout>
-
         </Box>
-
       </Grid>
     </Box>
   )

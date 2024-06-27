@@ -16,7 +16,7 @@ export const sideMenu = [
 
 export const siderConfig = {
     // 右导航条宽度
-    SIDER_WIDTH:"60px"
+    SIDER_WIDTH:"50px"
 }
 
 export const modelList = {
