@@ -7,34 +7,35 @@ import { siderConfig } from "@/data/sideMenu"
 
 export default function SidePanel() {
   return (
-    <Box
-      sx={{
-        width: "100%",
-        height: "100vh"
-      }}
-    >
 
-      <Grid container spacing={0} sx={{
-        padding: 0,
-        margin: 0,
-        width: "100vw",
-      }}>
-        <Box sx={{
-          display: "inline-block",
-          width: `calc(100% - ${siderConfig.SIDER_WIDTH} - 1%)`,
-          marginBottom: "1%",
-          marginTop: "1%",
-          marginLeft: "1%"
+      <Box
+        sx={{
+          width: "100%",
+          height: "100vh"
+        }}
+      >
+        <Grid container spacing={0} sx={{
+          padding: 0,
+          margin: 0,
+          width: "100vw",
         }}>
-          <LeftLayout></LeftLayout>
-        </Box>
-        <Box sx={{
-          display: "inline-block",
-          width: siderConfig.SIDER_WIDTH,
-        }}>
-          <RightLayout></RightLayout>
-        </Box>
-      </Grid>
-    </Box>
+          <Box sx={{
+            display: "inline-block",
+            width: `calc(100% - ${siderConfig.SIDER_WIDTH} - 1%)`,
+            marginBottom: "1%",
+            marginTop: "1%",
+            marginLeft: "1%"
+          }}>
+            <LeftLayout></LeftLayout>
+          </Box>
+          <Box sx={{
+            display: "inline-block",
+            width: siderConfig.SIDER_WIDTH,
+          }}>
+            <RightLayout></RightLayout>
+          </Box>
+        </Grid>
+      </Box>
+
   )
 }

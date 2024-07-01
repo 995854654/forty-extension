@@ -380,9 +380,14 @@ module.exports = function (webpackEnv) {
     module: {
       strictExportPresence: true,
       rules: [
+        // {
+        //   test: /\.tsx?$/,
+        //   loader: 'ts-loader'
+        // },
         {
-          test: /\.tsx?$/,
-          loader: 'ts-loader'
+          test: /\.(ts|tsx)$/,
+          exclude: /node_modules/,
+          use: 'babel-loader'
         },
         // Handle node_modules packages that contain sourcemaps
         shouldUseSourceMap && {

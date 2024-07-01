@@ -1,10 +1,10 @@
 import { init, RematchDispatch, RematchRootState } from '@rematch/core'
-import { models, RootModel } from '../models'
+import { models, RootModel } from '@/models/sider'
 import persistPlugin from "@rematch/persist";
 import storage from "redux-persist/lib/storage";
 
 const persist_plugin = persistPlugin<RootModel, RootModel>({
-    key: "root",
+    key: "sider",
     storage,
   })
 

@@ -1,16 +1,19 @@
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import ChatIcon from '@mui/icons-material/Chat';
-
+import ChatPage from "@/sidePanel/components/ChatPage";
+import YoutubePage from "@/sidePanel/components/YoutubePage";
 export const sideMenu = [
     {
         key: "chat",
         icon: ChatIcon,
-        title: "聊天" 
+        title: "聊天",
+        element: ChatPage
     },
     {
         key: "youtube-downloader",
         icon: YouTubeIcon,
-        title: "Youtube下载器" 
+        title: "Youtube下载器",
+        element: YoutubePage
     }
 ]
 
