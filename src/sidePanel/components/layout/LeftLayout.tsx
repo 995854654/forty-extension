@@ -7,7 +7,7 @@ import {sideMenu} from "@/data/sideMenu"
 export default function LeftLayout() {
   const LayoutComponent = useSelector((rootState:RootState)=> {
     let obj = sideMenu.filter((item) => {
-      return item.key == rootState.sideRouterModel.key
+      return item.key === rootState.sideRouterModel.key
     })
     if (obj.length >= 1) {
       return obj[0].element

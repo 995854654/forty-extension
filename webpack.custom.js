@@ -1,4 +1,3 @@
-const { template } = require('@babel/core');
 const paths = require('./config/paths');
 const path = require('path');
 module.exports = {
