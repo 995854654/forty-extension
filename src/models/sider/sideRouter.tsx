@@ -18,5 +18,8 @@ export const sideRouterModel = createModel<RootModel>()({
                 key: payload
             }
         }
-    }
+    },
+    effects: (dispatch) => ({
+        
+    })
 })

@@ -10,6 +10,8 @@ official document: `https://developer.chrome.com/docs/extensions?hl=zh-cn`
 2. 支持typescript
 
 
+
+
 # idea
 
 1. youtube视频下载器
@@ -18,3 +20,6 @@ official document: `https://developer.chrome.com/docs/extensions?hl=zh-cn`
 
 
 
+# 如何使用
+
+1. 修改`public/_locales/zh_CN`的`runEnvironment`, 仅支持`location`和`website`

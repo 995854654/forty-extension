@@ -1,30 +1,44 @@
-import YouTubeIcon from '@mui/icons-material/YouTube';
 import ChatIcon from '@mui/icons-material/Chat';
 import ChatPage from "@/sidePanel/components/ChatPage";
-import YoutubePage from "@/sidePanel/components/YoutubePage";
+import Downloader from "@/sidePanel/components/Downloader";
+import Login from '@/sidePanel/components/Login';
+import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
+
+
 export const sideMenu = [
     {
         key: "chat",
         icon: ChatIcon,
         title: "聊天",
-        element: ChatPage
+        element: ChatPage,
+        isDisplay: true,  // 是否展现到右侧导航栏中
+        default: true, // 初始默认页面
     },
     {
-        key: "youtube-downloader",
-        icon: YouTubeIcon,
-        title: "Youtube下载器",
-        element: YoutubePage
+        key: "downloader",
+        icon: DownloadForOfflineIcon,
+        title: "下载管理器",
+        element: Downloader,
+        isDisplay: true,
+    },
+    {
+        key: "login",
+        icon: DownloadForOfflineIcon,
+        title: "登录页面",
+        element: Login,
+        isDisplay: false,
     }
+
 ]
 
 export const siderConfig = {
     // 右导航条宽度
-    SIDER_WIDTH:"50px"
+    SIDER_WIDTH: "50px",
+    DEFAULT_PAGE: "chat"
 }
 
 export const modelList = {
     baseModel: [
-        
         {
             key: "GPT-4",
             label: "GPT-4",
@@ -49,4 +63,3 @@ export const modelList = {
         },
     ]
 }
-    

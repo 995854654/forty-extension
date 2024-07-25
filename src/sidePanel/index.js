@@ -7,6 +7,7 @@ import { store } from "@/store/sider"
 import { debounce } from "lodash";
 import { getPersistor } from "@rematch/persist";
 import { PersistGate } from "redux-persist/lib/integration/react";
+import Notification from "@/sidePanel/components/Message"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -27,6 +28,7 @@ const persistor = getPersistor();
 root.render(
     <PersistGate persistor={persistor}>
         <Provider store={store}>
+            <Notification />
             <SidePanel />
 
         </Provider>

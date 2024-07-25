@@ -1,4 +1,5 @@
 {
   "appName": { "message": "forty-extension" },
-  "appDescription": { "message": "forty extension summary" }
+  "appDescription": { "message": "forty extension summary" },
+  "runEnvironment": {"message": "location"}
 }

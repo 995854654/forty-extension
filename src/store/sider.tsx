@@ -4,6 +4,9 @@ import persistPlugin from "@rematch/persist";
 import storage from "redux-persist/lib/storage";
 
 const persist_plugin = persistPlugin<RootModel, RootModel>({
+    whitelist: [
+        "authenModel", "sideRouterModel",
+    ],
     key: "sider",
     storage,
   })

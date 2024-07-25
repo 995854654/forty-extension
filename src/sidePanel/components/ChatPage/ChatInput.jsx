@@ -9,8 +9,11 @@ import HistoryIcon from '@mui/icons-material/History';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-import ModelSelect from './ModelSelect';
-
+import { modelList } from "@/data/sideMenu"
+import Select from '@mui/joy/Select';
+import Option from '@mui/joy/Option';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import Typography from '@mui/joy/Typography';
 export default function ChatInput() {
     return (
         <Box sx={{
@@ -29,16 +32,71 @@ export default function ChatInput() {
                     <Grid container justifyContent="space-between">
                         <Grid xs={8} container justifyContent="start" spacing={1} sx={{ marginBottom: 0 }}>
                             <Grid>
-                                <ModelSelect />
+                                <Select
+                                    indicator={<KeyboardArrowDown sx={{ width: 18, height: 18 }} />}
+                                    variant="solid"
+                                    size="sm"
+                                    sx={{
+                                        minHeight: 0,
+                                        fontSize: "0.7em",
+                                        paddingTop: 0,
+                                        paddingBottom: 0
+                                    }}
+                                >
+                                    <>
+                                        <Typography
+                                            id="decorated-list-demo"
+                                            level="body-xs"
+                                            textTransform="uppercase"
+                                            fontWeight="lg"
+                                            mb={1}
+                                            sx={{
+                                                color: "#bebebe",
+                                                paddingLeft: '5%'
+                                            }}
+                                        >
+                                            基础模型
+                                        </Typography>
+                                        {modelList.baseModel.map((item) => {
+                                            return (
+                                                <Option key={item.key} value={item.key}>
+                                                    {item.label}
+                                                </Option>
+                                            )
+                                        })}
+                                    </>
+                                    <>
+                                        <Typography
+                                            id="decorated-list-demo"
+                                            level="body-xs"
+                                            textTransform="uppercase"
+                                            fontWeight="lg"
+                                            mb={1}
+                                            sx={{
+                                                color: "#bebebe",
+                                                paddingLeft: '5%'
+                                            }}
+                                        >
+                                            高级模型
+                                        </Typography>
+                                        {modelList.seniorModel.map((item) => {
+                                            return (
+                                                <Option key={item.key} value={item.key}>
+                                                    {item.label}
+                                                </Option>
+                                            )
+                                        })}
+                                    </>
+                                </Select>
                             </Grid>
                             <Grid>
                                 <Tooltip title="上传文件" placement="top">
-                                    <FileUploadIcon sx={{width:20, height:20}}/>
+                                    <FileUploadIcon sx={{ width: 20, height: 20 }} />
                                 </Tooltip>
                             </Grid>
                             <Grid>
                                 <Tooltip title="prompt提示" placement="top">
-                                    <AutoFixHighIcon sx={{width:20, height:20}}/>
+                                    <AutoFixHighIcon sx={{ width: 20, height: 20 }} />
                                 </Tooltip>
                             </Grid>
 
@@ -46,12 +104,12 @@ export default function ChatInput() {
                         <Grid xs={4} container justifyContent="end" spacing={1} sx={{ marginBottom: 0 }}>
                             <Grid>
                                 <Tooltip title="聊天记录" placement="top">
-                                    <HistoryIcon sx={{width:20, height:20}}/>
+                                    <HistoryIcon sx={{ width: 20, height: 20 }} />
                                 </Tooltip>
                             </Grid>
                             <Grid>
                                 <Tooltip title="新聊天" placement="top">
-                                    <AddCommentIcon sx={{width:20, height:20}}/>
+                                    <AddCommentIcon sx={{ width: 20, height: 20 }} />
                                 </Tooltip>
                             </Grid>
 
@@ -78,7 +136,7 @@ export default function ChatInput() {
                         }
                     }}
                 >
-                    <Grid container justifyContent="space-between" sx={{ width: "100%",paddingLeft: "2%" }}>
+                    <Grid container justifyContent="space-between" sx={{ width: "100%", paddingLeft: "2%" }}>
                         <Grid xs={1} container alignItems="center">
                             <ButtonBase>
                                 <img alt="brain" src={process.env.PUBLIC_URL + "/images/brain_icon.png"} style={{ width: "20px", height: "20px" }}></img>
@@ -86,8 +144,8 @@ export default function ChatInput() {
                         </Grid>
                         <Grid xs={10} container alignItems="center">
                             <InputBase
-                            multiline
-                            sx={{ width: "90%",fontSize:"0.8em"}}
+                                multiline
+                                sx={{ width: "90%", fontSize: "0.8em" }}
                                 placeholder="input what you want to know"
                             />
                         </Grid>
@@ -102,7 +160,7 @@ export default function ChatInput() {
                                 }
                             }} aria-label="search"
                             >
-                                <NearMeOutlinedIcon sx={{ color: "white",width:20,height:20 }}/>
+                                <NearMeOutlinedIcon sx={{ color: "white", width: 20, height: 20 }} />
                             </IconButton>
                         </Grid>
 
