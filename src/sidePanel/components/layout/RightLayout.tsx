@@ -12,6 +12,7 @@ import MenuItem from '@mui/joy/MenuItem';
 import Dropdown from '@mui/joy/Dropdown';
 import MenuButton from '@mui/joy/MenuButton';
 import Typography from '@mui/joy/Typography';
+import { USER_AVATOR } from '@/data/config';
 
 export default function RightLayout() {
 	const siderList = useSelector((rootState: RootState) => {
@@ -148,7 +149,7 @@ export default function RightLayout() {
 								>
 									{
 										isAuth ? (
-											<Avatar alt="personal avator" src="/images/yami.png" sx={{ width: 24, height: 24 }} />
+											<Avatar alt="personal avator" src={USER_AVATOR} sx={{ width: 24, height: 24 }} />
 										) : (
 											<Avatar sx={{ width: 24, height: 24 }}>
 												<PersonIcon></PersonIcon>

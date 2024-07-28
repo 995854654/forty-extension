@@ -5,7 +5,7 @@ import storage from "redux-persist/lib/storage";
 
 const persist_plugin = persistPlugin<RootModel, RootModel>({
     whitelist: [
-        "authenModel", "sideRouterModel",
+        "authenModel", "sideRouterModel", "settingModel"
     ],
     key: "sider",
     storage,

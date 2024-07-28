@@ -18,6 +18,11 @@ const AuthenForm: React.FC<AuthenFormProps> = ({ submitForm, loading }) => {
             [name]: value
         });
     };
+    const handleKeyDown = (event: any) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            submitForm(formData)
+        }
+    }
     return (
         <Grid sx={{
             height: "100%",
@@ -27,7 +32,10 @@ const AuthenForm: React.FC<AuthenFormProps> = ({ submitForm, loading }) => {
         }} container justifyContent="center" alignItems="center">
             <Box sx={{
                 width: "100%"
-            }}>
+            }}
+                onKeyDown={handleKeyDown}
+
+            >
                 <Box>
                     <Box sx={{
                         fontWeight: "900",

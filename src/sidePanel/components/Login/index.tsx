@@ -32,10 +32,12 @@ export default function Login() {
         sessionStorage.setItem("token", token)
         sessionStorage.setItem("token_type", tokenType)
     }
+    
     return (
         <Box sx={{
             height: "100%",
-        }}>
+        }}
+        >
 
             <AuthenForm submitForm={signIn} loading={submitLoading} />
         </Box>

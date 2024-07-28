@@ -1,0 +1,3 @@
+#chat-text-area::-webkit-scrollbar {
+    display: none;
+  }

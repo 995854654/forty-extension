@@ -14,13 +14,28 @@ import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import Typography from '@mui/joy/Typography';
+import Textarea from '@mui/joy/Textarea';
+import { Dispatch, RootState } from '@/store/sider';
+import { useDispatch, useSelector } from 'react-redux';
 export default function ChatInput() {
+    const chatContent = useSelector((rootState: RootState) => rootState.chatModel.content)
+    const dispatch = useDispatch<Dispatch>()
+   
+    const switchNewLine = (event:any) => {
+        if (event.key === 'Enter' && !event.shiftKey) {  
+            event.preventDefault();  
+          }  
+          if (event.key === 'Enter' && event.shiftKey) { 
+            dispatch.chatModel.setContent(`${chatContent}`)
+          }  
+    }
     return (
         <Box sx={{
             width: "100%",
             marginBottom: "2%",
 
-        }} className="S-chat-input">
+        }} className="S-chat-input"
+        >
 
             <Grid container justifyContent="center" sx={{
                 width: "100%",
@@ -127,7 +142,7 @@ export default function ChatInput() {
                         display: 'flex',
                         alignItems: 'center',
                         width: "90%",
-                        borderRadius: "50px",
+                        borderRadius: "40px",
                         boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
                         transition: "all 0.3s ease",
                         "&:hover": {
@@ -137,20 +152,37 @@ export default function ChatInput() {
                     }}
                 >
                     <Grid container justifyContent="space-between" sx={{ width: "100%", paddingLeft: "2%" }}>
-                        <Grid xs={1} container alignItems="center">
+                        <Grid xs={0.5} container alignItems="center">
                             <ButtonBase>
                                 <img alt="brain" src={process.env.PUBLIC_URL + "/images/brain_icon.png"} style={{ width: "20px", height: "20px" }}></img>
                             </ButtonBase>
                         </Grid>
-                        <Grid xs={10} container alignItems="center">
-                            <InputBase
-                                multiline
-                                sx={{ width: "90%", fontSize: "0.8em" }}
+                        <Grid xs={11} container alignItems="center" justifyContent="center">
+                            <Textarea
+                                value={chatContent}
+                                onChange={(event)=> dispatch.chatModel.setContent(event.target.value)}
+                                id="chat-text-area"
+                                maxRows={4}
+                                onKeyDown={switchNewLine}
+                                variant="plain"
+                                slotProps={{
+                                    textarea: {
+                                        sx: {
+                                            scrollbarWidth: "none"
+                                        }
+                                    }
+                                }}
+                                sx={{
+                                    marginTop: "1%",
+                                    marginBottom: "1%",
+                                    width: "80%",
+                                    height: "auto",
+                                }}
                                 placeholder="input what you want to know"
-                            />
+                            ></Textarea>
                         </Grid>
 
-                        <Grid container xs={1} justifyContent="end" alignItems="center">
+                        <Grid container xs={0.5} justifyContent="end" alignItems="center">
                             <IconButton type="button" sx={{
                                 width: 40,
                                 height: 40,
@@ -159,6 +191,7 @@ export default function ChatInput() {
                                     backgroundColor: "#d7f7eb"
                                 }
                             }} aria-label="search"
+                            onClick={dispatch.chatModel.chatWithLLM}
                             >
                                 <NearMeOutlinedIcon sx={{ color: "white", width: 20, height: 20 }} />
                             </IconButton>
