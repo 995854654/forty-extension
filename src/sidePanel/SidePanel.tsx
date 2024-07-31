@@ -7,16 +7,14 @@ import { siderConfig } from "@/data/sideMenu"
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, Dispatch } from "@/store/sider"
 export default function SidePanel() {
-  const isAuthenticated = useSelector(
-    (rootState: RootState) => rootState.authenModel.isAuthenticated
-  )
+
   const siderKey = useSelector(
     (rootState: RootState) => rootState.sideRouterModel.key
   )
   const dispatch = useDispatch<Dispatch>()
 
   useEffect(() => {
-    if (siderKey != "login"){
+    if (siderKey !== "login"){
       dispatch.authenModel.verify_authen_state()
     }
   }, [])

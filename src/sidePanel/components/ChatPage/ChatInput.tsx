@@ -1,7 +1,7 @@
 import React from 'react'
 import {
     Box, Paper, IconButton,
-    ButtonBase, Tooltip, InputBase
+    ButtonBase, Tooltip
 } from '@mui/material'
 import NearMeOutlinedIcon from '@mui/icons-material/NearMeOutlined';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -45,7 +45,7 @@ export default function ChatInput() {
                     width: "88%"
                 }}>
                     <Grid container justifyContent="space-between">
-                        <Grid xs={8} container justifyContent="start" spacing={1} sx={{ marginBottom: 0 }}>
+                        <Grid xs={7} container justifyContent="start" spacing={1} sx={{ marginBottom: 0 }}>
                             <Grid>
                                 <Select
                                     indicator={<KeyboardArrowDown sx={{ width: 18, height: 18 }} />}
@@ -163,6 +163,7 @@ export default function ChatInput() {
                                 onChange={(event)=> dispatch.chatModel.setContent(event.target.value)}
                                 id="chat-text-area"
                                 maxRows={4}
+                                minRows={4}
                                 onKeyDown={switchNewLine}
                                 variant="plain"
                                 slotProps={{

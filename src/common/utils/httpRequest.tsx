@@ -1,11 +1,12 @@
 import { APIResponse } from "@/models/base/response";
 
+
 // 封装GET请求
-export const getAPIRequest = async (url: string, header:any={}): Promise<APIResponse> => {
+export const getAPIRequest = async (url: string, header: any = {}): Promise<APIResponse> => {
     try {
         let token_type = sessionStorage.getItem("token_type")
         let token = sessionStorage.getItem("token")
-        const response = await fetch(url,{
+        const response = await fetch(url, {
             method: "GET",
             headers: {
                 ...header,

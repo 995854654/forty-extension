@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import StopCircleOutlinedIcon from '@mui/icons-material/StopCircleOutlined';
 const chatStyle = {
     width: "90%",
-    height: "500px",
+    height: "65vh",
     overflowY: "scroll",
     scrollbarWidth: "none",
     backgroundColor: "#1f1f1f",

@@ -1789,6 +1789,11 @@
   resolved "https://mirrors.huaweicloud.com/repository/npm/@leichtgewicht/ip-codec/-/ip-codec-2.0.5.tgz"
   integrity sha512-Vo+PSpZG2/fmgmiNzYK9qWRh8h/CHrwD0mo1h1DzL4yzHNSfWYujGTYsWGreD000gcgmZ7K4Ys6Tx9TxtsKdDw==
 
+"@microsoft/fetch-event-source@^2.0.1":
+  version "2.0.1"
+  resolved "https://mirrors.huaweicloud.com/repository/npm/@microsoft/fetch-event-source/-/fetch-event-source-2.0.1.tgz"
+  integrity sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==
+
 "@mui/base@5.0.0-beta.40":
   version "5.0.0-beta.40"
   resolved "https://mirrors.huaweicloud.com/repository/npm/@mui/base/-/base-5.0.0-beta.40.tgz"

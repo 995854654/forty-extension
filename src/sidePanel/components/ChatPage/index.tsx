@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2';
 import ChatInput from './ChatInput';
@@ -32,7 +32,7 @@ export default function ChatPage() {
           width: "100%",
         }}
       >
-        <Grid xs={10} sx={{ width: "100%", height: "65vh" }}>
+        <Grid xs={10} sx={{ width: "100%", height: "70vh" }}>
           {
             isInit ? (<DefaultHead />) : (<ChatBox />)
           }

@@ -1,6 +1,6 @@
 
 
-export default [
+const columns =  [
     {
         key: "resource_name",
         label: "标题",
@@ -17,3 +17,5 @@ export default [
         width: 25
     }
 ]
+
+export default columns
