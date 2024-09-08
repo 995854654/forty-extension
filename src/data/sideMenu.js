@@ -44,7 +44,7 @@ export const modelList = {
             label: "GPT-4",
         },
         {
-            key: "moonshot",
+            key: "moonshot-v1-8k",
             label: "Moonshot",
         },
         {

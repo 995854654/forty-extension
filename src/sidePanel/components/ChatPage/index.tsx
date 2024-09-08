@@ -32,7 +32,7 @@ export default function ChatPage() {
           width: "100%",
         }}
       >
-        <Grid xs={10} sx={{ width: "100%", height: "70vh" }}>
+        <Grid xs={10} sx={{ width: "100%", height: "65vh" }}>
           {
             isInit ? (<DefaultHead />) : (<ChatBox />)
           }

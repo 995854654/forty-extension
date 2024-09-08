@@ -1,7 +1,7 @@
 
 import { createModel } from "@rematch/core";
 import type { RootModel } from '@/models/sider'
-import { postByJSON } from '@/common/utils/httpRequest';
+import { postByJSON,getAPIRequest } from '@/common/utils/httpRequest';
 import { HTTP_API } from '@/api';
 type DownloaderState = {
     url: string,
@@ -41,7 +41,7 @@ export const downloaderModel = createModel<RootModel>()({
                     })
                     setTimeout(() => {
                         dispatch.downloaderModel.refresh_table()
-                    }, 2000)
+                    }, 500)
                 }else {
                     dispatch.notificationModel.notify({
                         notifyType:"error",
@@ -54,6 +54,15 @@ export const downloaderModel = createModel<RootModel>()({
             postByJSON(HTTP_API.get_resource_table).then((response) => {
                 if (response.success){
                     dispatch.downloaderModel.setReourceTable(response.data)
+                }else {
+                    dispatch.notificationModel.notify({notifyType: "error", "message": response.msg})
+                }
+            })
+        },
+        checkWebsiteStatus(){
+            getAPIRequest(HTTP_API.check_website_status).then((response) => {
+                if (response.success){
+                    console.log(response.data)
                 }else {
                     dispatch.notificationModel.notify({notifyType: "error", "message": response.msg})
                 }

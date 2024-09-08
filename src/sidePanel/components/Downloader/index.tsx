@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, InputLabel } from '@mui/material'
 import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
@@ -18,7 +18,13 @@ export default function Downloader() {
         const { value } = event.target
         dispatch.downloaderModel.setInputURL(value)
     }
- 
+    const click_refresh_table = () => {
+        dispatch.notificationModel.notify({notifyType: "success", message: "刷新成功"})
+        dispatch.downloaderModel.refresh_table()
+    }
+    useEffect(() => {
+        dispatch.downloaderModel.checkWebsiteStatus()
+    }, [])
     return (
         <Box sx={{
 
@@ -76,7 +82,13 @@ export default function Downloader() {
                     </Card>
                 </Grid>
                 <Grid >
-                    <CachedIcon onClick={dispatch.downloaderModel.refresh_table}/>
+                    <CachedIcon onClick={click_refresh_table} sx={{
+                        ":hover": {
+                            color: "#8a57ea",
+                            backgroundColor: "white",
+                            borderRadius: "30px"
+                        }
+                    }}/>
                     <DownloadTable />
 
                 </Grid>

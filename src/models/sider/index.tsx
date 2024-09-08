@@ -5,6 +5,8 @@ import { authenModel } from "./auth"
 import { settingModel } from "./setting"
 import { downloaderModel } from "./downloader"
 import { chatModel } from "./chat"
+import { llmModel } from "./llm"
+
 export interface RootModel extends Models<RootModel>{
     sideRouterModel: typeof sideRouterModel,
     notificationModel: typeof notificationModel,
@@ -12,6 +14,7 @@ export interface RootModel extends Models<RootModel>{
     settingModel: typeof settingModel,
     downloaderModel: typeof downloaderModel,
     chatModel: typeof chatModel,
+    llmModel: typeof llmModel
 }
 
 
@@ -21,5 +24,6 @@ export const models: RootModel = {
     authenModel,
     settingModel,
     downloaderModel,
-    chatModel
+    chatModel,
+    llmModel
 }

@@ -45,7 +45,7 @@ export default function ChatBox() {
                 dispatch.chatModel.setIsBottom(true)
             } else {
                 if (!isBottom)
-                dispatch.chatModel.setIsBottom(false)
+                    dispatch.chatModel.setIsBottom(false)
             }
 
         });
@@ -76,24 +76,27 @@ export default function ChatBox() {
                         })
                     }
                     <div ref={scrollRef}></div>
+                    <Grid container justifyContent="center">
+                    <Button
+                        size="sm"
+                        sx={{
+                            marginTop: "1%",
+                            color: "#8a57ea",
+                            display: loading ? "show" : "none",
+                            float: "inherit",
+                            fontSize: "0.5em",
+                            width: "100px"
+                        }} startDecorator={<StopCircleOutlinedIcon />} variant="outlined"
+                        onClick={dispatch.chatModel.stopGenerate}
+                    >停止生成</Button>
+                    </Grid>
+                    
                 </Card>
-           
+
 
             </Grid>
-            <Grid container justifyContent="center">
-            <Button 
-            size="sm"
-            sx={{
-                    marginTop: "1%",
-                    color: "#8a57ea",
-                    display: loading ? "show" : "none",
-                    float: "inherit",
-                    fontSize: "0.5em"
-                }} startDecorator={<StopCircleOutlinedIcon />} variant="outlined"
-                    onClick={dispatch.chatModel.stopGenerate}
-                >停止生成</Button>
-            </Grid>
          
+
         </Box>
 
 

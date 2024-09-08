@@ -4,6 +4,60 @@ import type { RootModel } from '@/models/sider'
 import { HTTP_API } from "@/api";
 import { v4 as uuid4 } from "uuid"
 import { fetchEventSource } from '@microsoft/fetch-event-source'
+import { postByJSON } from "@/common/utils/httpRequest";
+
+const markdownText = `
+## Langchain
+
+### 主要组成部分
+
+-   Model I/O: 管理LLM模型以及其输入(Prompts)和格式化输出(Output)
+-   Data connection: 管理主要用于建设私域知识库的向量数据存储（Vector Stores）、内容数据获取（Document Loaders）和转化（Transformers）、以及向量数据查询（Retrievers）
+-   Memory: 用于存储或获取对话历史记录的功能模块
+-   Chains：用于串联Memory、Model I/O、Data connection
+-   Agents: 基于Chains进一步串联工具(Tools)，从而将大语言模型的能力和本地、云服务能力结合，user --> agent --> many of LLMs --> agent --> user
+-   Callbacks: 提供了一个回调系统，可以连接到LLm申请的各个阶段，便于进行日志记录、追踪等数据导流
+-   Embedding: 文本嵌入，可以有两种模式，from_documents支持传入多个文档，from_text支持传入一段字符串。将文档嵌入到vector store中。原理就是将文本转化向量数据（供计算机识别）
+-   retriever: 检索器，通过查询vector store，查到相似度高的内容。
+-   Tool： 工具集，用于给Agent串联的工具。
+
+
+
+
+
+
+
+
+
+## FAQ
+
+### fastAPI文档加载异常
+原因：因为fastAPI文档使用了外网CDN的资源，所以需要将资源保存到本地
+
+解决链接：~https://blog.csdn.net/m0_52726759/article/details/124854070?spm=1001.2014.3001.5502~
+
+1. 在~Lib/site-package/fastapi/openapi/docs.py~修改swagger url
+    ~~~python
+   def get_swagger_ui_html():
+        ...
+        swagger_js_url: str = "/static/swagger-ui/swagger-ui-bundle.js"
+        swagger_css_url: str = "/static/swagger-ui/swagger-ui.css"
+        swagger_favicon_url: str = "/static/swagger-ui/favicon.png"
+   
+   def get_redoc_html():
+        ...
+        redoc_js_url:str = "/static/bundles/redoc.standalone.js"
+   ~~~
+
+2. 在fastAPI应用中添加以下代码：
+    ~~~python
+    from fastapi import FastAPI
+    from starlette.staticfiles import StaticFiles
+    app = FastAPI()
+    # 将OpenAI docs代码接管到本地中
+    app.mount("/static", StaticFiles(directory="static"), name="static")
+    ~~~
+`
 
 type History = {
     direction: "left" | "right",
@@ -16,6 +70,7 @@ type ChatType = {
     isBottom: boolean,
     loading: boolean,
     content: string,
+    historyID: string, 
     historyList: History[]
 }
 
@@ -24,6 +79,7 @@ const initChatState: ChatType = {
     isBottom: false,
     loading: false,
     content: "",
+    historyID: null,
     historyList: []
 }
 
@@ -76,6 +132,12 @@ export const chatModel = createModel<RootModel>()({
                 ...state,
                 historyList: new_history
             }
+        },
+        createHistoryID: (state:ChatType) => {
+            return {
+                ...state,
+                historyID: uuid4()
+            }
         }
     },
     effects: (dispatch) => ({
@@ -87,6 +149,9 @@ export const chatModel = createModel<RootModel>()({
             }
         },
         chatWithLLM(_, state) {
+            if (!state.chatModel.historyID){
+                dispatch.chatModel.createHistoryID()
+            }
             if (!state.chatModel.content.trim()) {
                 dispatch.notificationModel.notify({
                     notifyType: "error",
@@ -125,9 +190,6 @@ export const chatModel = createModel<RootModel>()({
         },
 
         sendContextByTemp(_, state) {
-            function heredoc(fn) {
-                return fn.toString().split('\n').slice(1, -1).join('\n') + '\n'
-            }
             let key = uuid4()
             dispatch.chatModel.addHistory({
                 direction: "left",
@@ -135,24 +197,7 @@ export const chatModel = createModel<RootModel>()({
                 context: ""
             })
             setTimeout(() => {
-                let chatResponse = heredoc(function () {/*
-                   在一个阳光明媚的春天，我出生在一个小镇上。小镇的生活虽然平淡，但却充满了温暖。我的父母都是普通的工人，尽管他们的日子过得很辛苦，但他们始终给予我无尽的爱和关怀。
-
-我在这个小镇上度过了快乐的童年。记得和小伙伴们一起在河边捉蝌蚪，在田野里奔跑，或者在傍晚时分听着虫鸣、看着星空。那时的我，心中充满了对世界的好奇与向往，觉得未来充满了无限可能。
-
-上学后，我渐渐意识到，我的生活与许多同学的生活并不一样。家庭经济的拮据让我有时无法参加课外活动，也让我在学业上感到一丝压力。尽管如此，我从未放弃过。努力学习和克服困难成为了我生活的一部分。我开始理解，成长不仅是身体的变化，更是心灵和思想的蜕变。
-
-随着年纪的增长，我开始更加深入地思考自己的理想与目标。高中时，我对文学产生了浓厚的兴趣，常常写一些小文章或诗歌。老师的鼓励让我对写作充满信心，我渐渐意识到，文字是我表达内心世界的一种方式。通过写作，我学会了观察生活、反思自我，也让我在与他人的沟通中变得更加敏感与 empathetic。
-
-然而，人生的道路并不像我想象的那样一帆风顺。在大学里，经济压力再一次压得我喘不过气来。为了减轻家庭负担，我选择了一份兼职工作。那段时间，我常常忙碌于课程与工作之间，几乎没有时间休息。一次次的疲惫让我感到无比沮丧，但我告诉自己，这些经历终将成为我成长的一部分。
-
-正是因为这些艰辛的经历，让我更加懂得了珍惜。当我终于站在毕业典礼的舞台上，手握学位证书的那一刻，泪水夺眶而出。那是无数个日日夜夜努力的结晶，是我和我的家人共同付出的结果。这份成就感不只是属于我，也属于所有支持我的人。
-
-步入社会后，我开始真正面对生活的挑战。工作中的压力、人与人之间的摩擦，让我意识到，成长不仅仅是取得成就，更是学会面对挫折与困难。每一次失败都是一次宝贵的经验，每一次挑战都让我变得更加成熟。
-
-回首一路走来的点滴，我明白了成长的意义。它不仅是身体的变化，更是心灵的成长，是对生活的深刻理解和对未来的美好期待。无论未来有什么样的挑战，我都将以一颗勇敢和坚定的心，继续前行。
-
-                 */});
+                let chatResponse = markdownText;
                  dispatch.chatModel.saveAIChatResponse({
                     direction: "left",
                     key,
@@ -161,13 +206,27 @@ export const chatModel = createModel<RootModel>()({
                 dispatch.chatModel.setLoading(false)
             }, 3000)
         },
+        saveHistoryToDB(_, state){
+            console.log("saveHistory")
+            let request = {
+                historyID: state.chatModel.historyID,
+                messages: state.chatModel.historyList
+            }
+            postByJSON(HTTP_API.saveHistory, request).then((res) => {
+                if (res.success){
+                    console.log("save history successfully!!")
+                }
+            })
 
+        },
         sendContextBySSE(_, state) {
             const ctrl = new AbortController()
             let token_type = sessionStorage.getItem("token_type")
             let token = sessionStorage.getItem("token")
             let request = {
-                context: state.chatModel.content
+                context: state.chatModel.content,
+                historyID: state.chatModel.historyID,
+                messages: state.chatModel.historyList.slice(0, -1)
             }
             let key = uuid4()
 
@@ -188,6 +247,9 @@ export const chatModel = createModel<RootModel>()({
                 onmessage(msg: { data: any, event: string }) {
                     // 服务器返回消息回调 返回{ data,event,id,retry } ，data即服务器返回数据
                     let chatResponse = msg.data
+                    if (chatResponse === ""){
+                        chatResponse = "\n"
+                    }
                     dispatch.chatModel.saveAIChatResponse({
                         direction: "left",
                         key,
@@ -196,6 +258,7 @@ export const chatModel = createModel<RootModel>()({
                 },
                 onclose() {
                     dispatch.chatModel.setLoading(false)
+                    dispatch.chatModel.saveHistoryToDB(null)
                     console.log("Closing EventSource")
                     // 正常结束的回调
                     ctrl?.abort()

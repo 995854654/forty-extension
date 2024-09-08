@@ -10,10 +10,15 @@ import { Dispatch } from '@/store/sider';
 import { useDispatch } from 'react-redux';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import MarkdownRender from '@/components/MarkdownRender';
 const ChatMessage = ({ direction, chatContext, systemName, userName }) => {
     const dispatch = useDispatch<Dispatch>()
-    const duplicateText = () => {
-        navigator.clipboard.writeText(chatContext)
+    const duplicateText = (context: string = null) => {
+        if (context){
+            navigator.clipboard.writeText(context)
+        }else {
+            navigator.clipboard.writeText(chatContext)
+        }
         dispatch.notificationModel.notify({
             notifyType: "success",
             message: "复制成功"
@@ -67,10 +72,8 @@ const ChatMessage = ({ direction, chatContext, systemName, userName }) => {
 
                 )
             }
-            <Card>
-                <Typography>
-                    {chatContext}
-                </Typography>
+            <Card sx={{paddingTop: 0, paddingBottom: 0}}>
+                <MarkdownRender markdownText={chatContext} copyText={duplicateText}></MarkdownRender>
             </Card>
             <Grid container sx={{
                 marginTop: "5px"
@@ -81,7 +84,7 @@ const ChatMessage = ({ direction, chatContext, systemName, userName }) => {
                             width: 18,
                             height: 18,
                             color: "white"
-                        }} onClick={duplicateText} />
+                        }} onClick={() => duplicateText(null)} />
                     </Tooltip>
                 </Grid>
                 <Grid>
@@ -99,7 +102,7 @@ const ChatMessage = ({ direction, chatContext, systemName, userName }) => {
                             width: 18,
                             height: 18,
                             color: "white"
-                        }} onClick={duplicateText} />
+                        }} />
                     </Tooltip>
                 </Grid>
 

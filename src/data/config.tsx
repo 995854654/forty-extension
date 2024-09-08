@@ -11,3 +11,5 @@ export const themeConfig = {
         primaryColor: "" 
     }
 }
+
+export const DEFAULT_MODEL_NAME = "moonshot-v1-8k"

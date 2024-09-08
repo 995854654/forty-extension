@@ -128,12 +128,12 @@ export default function DownloadTable() {
                 <tbody>
                     {resourceList.map((item) => {
                         return (
-                            <tr key={item.source_id}>
+                            <tr key={item.resource_id}>
                                 {
                                     columns.map((columnItem) => {
                                         if (columnItem.key === "status") {
                                             return (
-                                                <td key={`${item.source_id} + ${columnItem.key}`}>
+                                                <td key={`${item.resource_id} + ${columnItem.key}`}>
                                                     <StatusIcon num={item.status} />
                                                 </td>
                                             )
@@ -141,7 +141,7 @@ export default function DownloadTable() {
                                         } else {
                                             return (
                                                 <td
-                                                    key={`${item.source_id} + ${columnItem.key}`}
+                                                    key={`${item.resource_id} + ${columnItem.key}`}
                                                 >{item[columnItem["key"]]}</td>
                                             )
                                         }

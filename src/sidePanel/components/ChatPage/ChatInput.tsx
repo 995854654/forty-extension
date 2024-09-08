@@ -19,6 +19,7 @@ import { Dispatch, RootState } from '@/store/sider';
 import { useDispatch, useSelector } from 'react-redux';
 export default function ChatInput() {
     const chatContent = useSelector((rootState: RootState) => rootState.chatModel.content)
+    const model_name = useSelector((rootState: RootState) => rootState.llmModel.modelName)
     const dispatch = useDispatch<Dispatch>()
    
     const switchNewLine = (event:any) => {
@@ -28,6 +29,9 @@ export default function ChatInput() {
           if (event.key === 'Enter' && event.shiftKey) { 
             dispatch.chatModel.setContent(`${chatContent}`)
           }  
+    }
+    const selectLLMModel = (_, newValue: string) => {
+        dispatch.llmModel.setCurrentModel(newValue)
     }
     return (
         <Box sx={{
@@ -49,6 +53,8 @@ export default function ChatInput() {
                             <Grid>
                                 <Select
                                     indicator={<KeyboardArrowDown sx={{ width: 18, height: 18 }} />}
+                                    defaultValue={model_name}
+                                    onChange={selectLLMModel}
                                     variant="solid"
                                     size="sm"
                                     sx={{
