@@ -4,8 +4,8 @@ import type { RootModel } from '@/models/sider'
 import { HTTP_API } from "@/api";
 import { v4 as uuid4 } from "uuid"
 import { fetchEventSource } from '@microsoft/fetch-event-source'
-import { postByJSON } from "@/common/utils/httpRequest";
-
+import { postByJSON, getAPIRequest } from "@/common/utils/httpRequest";
+import { ChatBase, ChatType, HistoryBase } from "@/common/types/chat";
 const markdownText = `
 ## Langchain
 
@@ -59,28 +59,17 @@ const markdownText = `
     ~~~
 `
 
-type History = {
-    direction: "left" | "right",
-    key: string,
-    context: string
-}
 
-type ChatType = {
-    initStatus: boolean,
-    isBottom: boolean,
-    loading: boolean,
-    content: string,
-    historyID: string, 
-    historyList: History[]
-}
 
 const initChatState: ChatType = {
-    initStatus: true,
-    isBottom: false,
-    loading: false,
+    initStatus: true,  
+    isBottom: false,  // 检查聊天记录是否滚动到达底部  
+    loading: false,  // llm 回复等待
+    chatHistoryOpen: false,
     content: "",
     historyID: null,
-    historyList: []
+    chatList: [], // 聊天窗口的聊天记录
+    historyList: []  // 聊天历史记录
 }
 
 export const chatModel = createModel<RootModel>()({
@@ -110,39 +99,58 @@ export const chatModel = createModel<RootModel>()({
                 content: payload
             }
         },
-        addHistory: (state: ChatType, payload: History) => {
-            let arr = [...state.historyList]
+        addChatMessage: (state: ChatType, payload: ChatBase) => {
+            let arr = [...state.chatList]
             arr.push(payload)
             return {
                 ...state,
-                historyList: arr
+                chatList: arr
             }
         },
-        saveAIChatResponse: (state: ChatType, payload: History) => {
-            let len = state.historyList.length
-            let current_context = state.historyList[len - 1].context
+        setChatList: (state: ChatType, payload: ChatBase[]) => {
+            return {
+                ...state,
+                chatList:payload
+            }
+        },
+        saveAIChatResponse: (state: ChatType, payload: ChatBase) => {
+            let len = state.chatList.length
+            let current_context = state.chatList[len - 1].context
             current_context += payload.context
             let record = {
                 ...payload,
                 context: current_context
             }
-            let new_history = state.historyList.slice(0, len - 1)
+            let new_history = state.chatList.slice(0, len - 1)
             new_history.push(record)
             return {
                 ...state,
-                historyList: new_history
+                chatList: new_history
             }
         },
-        createHistoryID: (state:ChatType) => {
+       
+        setHistoryID: (state:ChatType, payload: string) => {
             return {
                 ...state,
-                historyID: uuid4()
+                historyID: payload
+            }
+        },
+        setOpenChatHistory: (state:ChatType, payload:boolean) => {
+            return {
+                ...state,
+                chatHistoryOpen: payload
+            }
+        },
+        setChatHistoryList: (state:ChatType, payload:HistoryBase[]) => {
+            return {
+                ...state,
+                historyList: payload
             }
         }
     },
     effects: (dispatch) => ({
         checkIfinit(_, state) {
-            if (state.chatModel.historyList.length === 0) {
+            if (state.chatModel.chatList.length === 0) {
                 dispatch.chatModel.setInitStatus(true)
             } else {
                 dispatch.chatModel.setInitStatus(false)
@@ -150,7 +158,7 @@ export const chatModel = createModel<RootModel>()({
         },
         chatWithLLM(_, state) {
             if (!state.chatModel.historyID){
-                dispatch.chatModel.createHistoryID()
+                dispatch.chatModel.setHistoryID(uuid4())
             }
             if (!state.chatModel.content.trim()) {
                 dispatch.notificationModel.notify({
@@ -168,16 +176,18 @@ export const chatModel = createModel<RootModel>()({
             }
             dispatch.chatModel.setLoading(true)
             dispatch.chatModel.setInitStatus(false)
-            let chatContext: History = {
+            let chatContext: ChatBase = {
                 key: uuid4(),
                 direction: "right",
                 context: state.chatModel.content
             }
-            dispatch.chatModel.addHistory(chatContext)
+            console.log(state.chatModel.content)
+
+            dispatch.chatModel.addChatMessage(chatContext)
             // 发送SSE请求给BE
-            // dispatch.chatModel.sendContextBySSE(null)
+            dispatch.chatModel.sendContextBySSE(null)
             // 临时版，避免过度消耗gpt
-            dispatch.chatModel.sendContextByTemp(null)
+            // dispatch.chatModel.sendContextByTemp(null)
 
             // 清空信息
             dispatch.chatModel.setContent("")
@@ -191,7 +201,7 @@ export const chatModel = createModel<RootModel>()({
 
         sendContextByTemp(_, state) {
             let key = uuid4()
-            dispatch.chatModel.addHistory({
+            dispatch.chatModel.addChatMessage({
                 direction: "left",
                 key,
                 context: ""
@@ -210,7 +220,7 @@ export const chatModel = createModel<RootModel>()({
             console.log("saveHistory")
             let request = {
                 historyID: state.chatModel.historyID,
-                messages: state.chatModel.historyList
+                messages: state.chatModel.chatList
             }
             postByJSON(HTTP_API.saveHistory, request).then((res) => {
                 if (res.success){
@@ -226,11 +236,11 @@ export const chatModel = createModel<RootModel>()({
             let request = {
                 context: state.chatModel.content,
                 historyID: state.chatModel.historyID,
-                messages: state.chatModel.historyList.slice(0, -1)
+                messages: state.chatModel.chatList.slice(0, -1)
             }
             let key = uuid4()
 
-            dispatch.chatModel.addHistory({
+            dispatch.chatModel.addChatMessage({
                 direction: "left",
                 key,
                 context: ""
@@ -273,6 +283,24 @@ export const chatModel = createModel<RootModel>()({
                 },
 
             })
+        },
+
+        async getChatHistoryList(_, state){
+            let response = await getAPIRequest(HTTP_API.getChatHistory)
+            dispatch.chatModel.setChatHistoryList(response.data || [])
+        },
+
+        changeChatMessageList(payload: HistoryBase, state){
+            dispatch.chatModel.setInitStatus(false)
+            dispatch.chatModel.setHistoryID(payload.history_id)
+            dispatch.chatModel.setChatList(JSON.parse(payload.messages))
+            dispatch.chatModel.setOpenChatHistory(false)
+
+        },
+        addNewChat(){
+            dispatch.chatModel.setInitStatus(true)
+            dispatch.chatModel.setHistoryID(null)
+            dispatch.chatModel.setChatList([])
         },
     })
 })

@@ -25,7 +25,7 @@ export const authenModel = createModel<RootModel>()({
         async verify_authen_state() {
             let token = sessionStorage.getItem("token")
             let token_type = sessionStorage.getItem("token_type")
-            let response: APIResponse = await getAPIRequest(HTTP_API.refresh_token, {
+            let response: APIResponse = await getAPIRequest(HTTP_API.refreshToken, {
                 "Authorization": `${token_type} ${token}`
             })
 

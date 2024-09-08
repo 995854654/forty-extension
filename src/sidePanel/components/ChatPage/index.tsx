@@ -6,9 +6,12 @@ import DefaultHead from './DefaultHead';
 import ChatBox from './ChatBox';
 import { RootState,Dispatch } from '@/store/sider';
 import { useSelector, useDispatch } from 'react-redux';
+import ChatHistoryDrawer from './ChatHistoryDrawer';
 import "./index.css"
 export default function ChatPage() {
   const isInit = useSelector((rootState: RootState) => rootState.chatModel.initStatus)
+  const chatHistoryOpen = useSelector((rootState: RootState) => rootState.chatModel.chatHistoryOpen)
+  const historyList = useSelector((rootState: RootState) => rootState.chatModel.historyList)
   const dispatch = useDispatch<Dispatch>()
   useEffect(() => {
     dispatch.chatModel.checkIfinit(null)
@@ -42,6 +45,11 @@ export default function ChatPage() {
         </Grid>
       </Grid>
 
+          <ChatHistoryDrawer 
+          open={chatHistoryOpen} 
+          setOpen={dispatch.chatModel.setOpenChatHistory} 
+          historyList={historyList} 
+          changeChatMessage={dispatch.chatModel.changeChatMessageList}></ChatHistoryDrawer>
 
 
     </Box>

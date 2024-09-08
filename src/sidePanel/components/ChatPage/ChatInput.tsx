@@ -33,6 +33,12 @@ export default function ChatInput() {
     const selectLLMModel = (_, newValue: string) => {
         dispatch.llmModel.setCurrentModel(newValue)
     }
+
+    const openHistoryDrawer = () => {
+        dispatch.chatModel.getChatHistoryList(null)
+        dispatch.chatModel.setOpenChatHistory(true)
+    }
+
     return (
         <Box sx={{
             width: "100%",
@@ -125,12 +131,12 @@ export default function ChatInput() {
                         <Grid xs={4} container justifyContent="end" spacing={1} sx={{ marginBottom: 0 }}>
                             <Grid>
                                 <Tooltip title="聊天记录" placement="top">
-                                    <HistoryIcon sx={{ width: 20, height: 20 }} />
+                                    <HistoryIcon sx={{ width: 20, height: 20 }} onClick={openHistoryDrawer}/>
                                 </Tooltip>
                             </Grid>
                             <Grid>
                                 <Tooltip title="新聊天" placement="top">
-                                    <AddCommentIcon sx={{ width: 20, height: 20 }} />
+                                    <AddCommentIcon sx={{ width: 20, height: 20 }} onClick={dispatch.chatModel.addNewChat} />
                                 </Tooltip>
                             </Grid>
 

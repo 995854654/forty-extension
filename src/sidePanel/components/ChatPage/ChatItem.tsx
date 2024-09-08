@@ -6,8 +6,8 @@ import { Avatar, Box } from '@mui/material'
 import Typography from '@mui/joy/Typography';
 import Tooltip from '@mui/joy/Tooltip';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { Dispatch } from '@/store/sider';
-import { useDispatch } from 'react-redux';
+import { Dispatch, RootState } from '@/store/sider';
+import { useDispatch, useSelector } from 'react-redux';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import MarkdownRender from '@/components/MarkdownRender';
@@ -73,7 +73,12 @@ const ChatMessage = ({ direction, chatContext, systemName, userName }) => {
                 )
             }
             <Card sx={{paddingTop: 0, paddingBottom: 0}}>
-                <MarkdownRender markdownText={chatContext} copyText={duplicateText}></MarkdownRender>
+                {
+                    direction === "left" ? 
+                    <MarkdownRender markdownText={chatContext} copyText={duplicateText}></MarkdownRender> : 
+                    <Typography sx={{ whiteSpace: 'pre-wrap' }}>{chatContext}</Typography>
+                }
+                
             </Card>
             <Grid container sx={{
                 marginTop: "5px"
@@ -114,12 +119,13 @@ const ChatMessage = ({ direction, chatContext, systemName, userName }) => {
 
 
 export default function ChatItem({ direction, chatContext }) {
+    const llmModelName = useSelector((rootState:RootState) => rootState.llmModel.modelName)
     return (
         <Box>
             <Grid container justifyContent={direction === "left" ? "start" : "end"}>
                 <ChatMessage
                     direction={direction}
-                    chatContext={chatContext} systemName="gpt-4-turbo" userName="you" />
+                    chatContext={chatContext} systemName={llmModelName} userName="you" />
             </Grid>
         </Box>
     )

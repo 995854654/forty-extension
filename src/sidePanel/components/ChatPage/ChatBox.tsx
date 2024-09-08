@@ -24,7 +24,7 @@ const chatStyleForNotBottom = {
 export default function ChatBox() {
     const scrollRef = useRef()
     const isBottom = useSelector((rootState: RootState) => rootState.chatModel.isBottom)
-    const historyList = useSelector((rootState: RootState) => rootState.chatModel.historyList)
+    const chatList = useSelector((rootState: RootState) => rootState.chatModel.chatList)
     const loading = useSelector((rootState: RootState) => rootState.chatModel.loading)
     const dispatch = useDispatch<Dispatch>()
     useEffect(() => {
@@ -57,7 +57,7 @@ export default function ChatBox() {
             let event: any = scrollRef.current
             event.scrollIntoView({ behavior: 'smooth' });
         }
-    }, [historyList])
+    }, [chatList])
     return (
         <Box sx={{
             height: "100%",
@@ -71,7 +71,7 @@ export default function ChatBox() {
                     sx={isBottom ? chatStyle : { ...chatStyle, ...chatStyleForNotBottom }}
                     variant="plain">
                     {
-                        historyList.map((item) => {
+                        chatList.map((item) => {
                             return <ChatItem key={item.key} direction={item.direction} chatContext={item.context} />
                         })
                     }

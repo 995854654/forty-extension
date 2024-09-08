@@ -31,7 +31,7 @@ export const downloaderModel = createModel<RootModel>()({
     effects: (dispatch) => ({
         downloadResource(_, rootState){
 
-            postByJSON(HTTP_API.download_resource, {
+            postByJSON(HTTP_API.downloadResource, {
                 url: rootState.downloaderModel.url
             }).then((response) => {
                 if (response.success){
@@ -51,7 +51,7 @@ export const downloaderModel = createModel<RootModel>()({
             })
         },
         refresh_table(){
-            postByJSON(HTTP_API.get_resource_table).then((response) => {
+            postByJSON(HTTP_API.getResourceTable).then((response) => {
                 if (response.success){
                     dispatch.downloaderModel.setReourceTable(response.data)
                 }else {
@@ -60,7 +60,7 @@ export const downloaderModel = createModel<RootModel>()({
             })
         },
         checkWebsiteStatus(){
-            getAPIRequest(HTTP_API.check_website_status).then((response) => {
+            getAPIRequest(HTTP_API.checkWebsiteStatus).then((response) => {
                 if (response.success){
                     console.log(response.data)
                 }else {
